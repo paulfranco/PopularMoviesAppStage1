@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             // Get data from local resources
             // Get Movie objects
             Parcelable[] parcelable = savedInstanceState.
-                    getParcelableArray(PARCEL_MOVIE);
+                    getParcelableArray(getString(R.string.parcel_movie));
 
             if (parcelable != null) {
                 int numMovieObjects = parcelable.length;

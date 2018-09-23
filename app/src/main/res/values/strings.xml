@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Popular Movies App Stage 1</string>
+    <string name="parcel_movie">PARCEL_MOVIE</string>
 </resources>
