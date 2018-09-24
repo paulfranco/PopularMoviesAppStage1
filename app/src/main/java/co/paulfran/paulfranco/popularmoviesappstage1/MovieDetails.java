@@ -19,7 +19,7 @@ public class MovieDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
+        setContentView(R.layout.movie_details);
 
         TextView tvOriginalTitle = (TextView) findViewById(R.id.textview_original_title);
         ImageView ivPoster = (ImageView) findViewById(R.id.imageview_poster);
