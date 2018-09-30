@@ -19,9 +19,7 @@ import java.net.URL;
 class FetchMovieAsyncTask extends AsyncTask<String, Void, Movie[]> {
 
     private final String LOG_TAG = FetchMovieAsyncTask.class.getSimpleName();
-
     private final String mApiKey;
-
     private final OnTaskFinish mListener;
 
     public FetchMovieAsyncTask(OnTaskFinish listener, String apiKey) {
@@ -36,43 +34,48 @@ class FetchMovieAsyncTask extends AsyncTask<String, Void, Movie[]> {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
-        // Holds data returned from the API
-        String moviesJsonStr = null;
+        // Set the moviesJsonString to null
+        String moviesJsonString = null;
 
         try {
             URL url = getApiUrl(params);
 
-            // Start connecting to get JSON
+            // Start the URL connection
             urlConnection = (HttpURLConnection) url.openConnection();
+            // Set the request to GET
             urlConnection.setRequestMethod("GET");
+            // Complete the connection
             urlConnection.connect();
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuilder builder = new StringBuilder();
-
+            // If the inputStream is empty return null
             if (inputStream == null) {
                 return null;
             }
+            // Else read the data in the inputStream
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
             while ((line = reader.readLine()) != null) {
-                // Adds '\n' at last line if not already there.
-                // This supposedly makes it easier to debug.
+                // Adds '\n' after each line (new line)
                 builder.append(line).append("\n");
             }
 
             if (builder.length() == 0) {
-                // No data found. Nothing more to do here.
+                // No data found.
                 return null;
             }
 
-            moviesJsonStr = builder.toString();
+            moviesJsonString = builder.toString();
+
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            // Log the Error
+            Log.e(LOG_TAG, "Error: ", e);
             return null;
+
         } finally {
-            // Tidy up: release url connection and buffered reader
+            // Release url connection
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -80,14 +83,15 @@ class FetchMovieAsyncTask extends AsyncTask<String, Void, Movie[]> {
                 try {
                     reader.close();
                 } catch (final IOException e) {
+                    // Log the Error in closing the stream
                     Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
         }
 
         try {
-            // Make sense of the JSON data
-            return getMoviesDataFromJson(moviesJsonStr);
+            // Get the JSON data needed
+            return getMoviesDataFromJson(moviesJsonString);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -99,12 +103,12 @@ class FetchMovieAsyncTask extends AsyncTask<String, Void, Movie[]> {
     /**
      * Extracts data from the JSON object and returns an Array of movie objects.
      *
-     * @param moviesJsonStr JSON string to be traversed
+     * @param moviesJsonString JSON string to be traversed
      * @return Array of Movie objects
      * @throws JSONException
      */
-    private Movie[] getMoviesDataFromJson(String moviesJsonStr) throws JSONException {
-        // JSON tags
+    private Movie[] getMoviesDataFromJson(String moviesJsonString) throws JSONException {
+        // Initialize Json Tags
         final String TAG_RESULTS = "results";
         final String TAG_ORIGINAL_TITLE = "original_title";
         final String TAG_POSTER_PATH = "poster_path";
@@ -112,14 +116,14 @@ class FetchMovieAsyncTask extends AsyncTask<String, Void, Movie[]> {
         final String TAG_VOTE_AVERAGE = "vote_average";
         final String TAG_RELEASE_DATE = "release_date";
 
-        // Get the array containing hte movies found
-        JSONObject moviesJson = new JSONObject(moviesJsonStr);
+        // Get the array containing the movies found
+        JSONObject moviesJson = new JSONObject(moviesJsonString);
         JSONArray resultsArray = moviesJson.getJSONArray(TAG_RESULTS);
 
         // Create array of Movie objects that stores data from the JSON string
         Movie[] movies = new Movie[resultsArray.length()];
 
-        // Traverse through movies one by one and get data
+        // Iterate through movies one by one and get data
         for (int i = 0; i < resultsArray.length(); i++) {
             // Initialize each object before it can be used
             movies[i] = new Movie();
@@ -156,12 +160,14 @@ class FetchMovieAsyncTask extends AsyncTask<String, Void, Movie[]> {
                 .appendPath(parameters[0]) //add /top_rated or /popular to the url
                 .appendQueryParameter(API_KEY_PARAM, mApiKey) //add the api key
                 .build();
-        Log.d(TAG, "outcome = " + builtUri); //show the final url in the logcat
+        // Log the final Url
+        Log.d(TAG, "outcome = " + builtUri);
         return new URL(builtUri.toString());
 
     }
 
-    private static final String TAG = "Debug FetchMovieAsync"; //For debuging the final url
+    //For debuging the final url
+    private static final String TAG = "Debug FetchMovieAsync";
 
     @Override
     protected void onPostExecute(Movie[] movies) {
