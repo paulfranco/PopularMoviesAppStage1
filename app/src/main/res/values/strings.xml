@@ -1,6 +1,15 @@
 <resources>
-    <string name="app_name">Popular Movies App Stage 1</string>
+    <string name="app_name">Popular Movies</string>
     <string name="parcel_movie">PARCEL_MOVIE</string>
     <string name="no_summary_found">No Summary Found</string>
     <string name="no_release_date_found">No Release Date Found</string>
+    <string name="key_themoviedb">dcf55e32a9a8594c9096e5ee7f86c9ed</string>
+    <string name="pref_sort_method_key">SORT_METHOD</string>
+    <string name="pref_sort_top_rated">SORT_TOP_RATED</string>
+    <string name="pref_sort_popular">SORT_POPULAR</string>
+    <string name="sort_top_rated">top_rated</string>
+    <string name="sort_popular">popular</string>
+    <string name="title_activity_movie_details">Movie Details</string>
+    <string name="no_internet">Internet Connectivity Not Available</string>
+    <string name="cant_get_release_date">Error can\'t parse the movie release date</string>
 </resources>

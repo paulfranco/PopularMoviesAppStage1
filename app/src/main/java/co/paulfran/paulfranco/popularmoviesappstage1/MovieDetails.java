@@ -21,12 +21,16 @@ public class MovieDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
 
-        TextView tvOriginalTitle = (TextView) findViewById(R.id.textview_original_title);
-        ImageView ivPoster = (ImageView) findViewById(R.id.imageview_poster);
-        TextView tvOverView = (TextView) findViewById(R.id.textview_overview);
-        TextView tvVoteAverage = (TextView) findViewById(R.id.textview_vote_average);
-        TextView tvReleaseDate = (TextView) findViewById(R.id.textview_release_date);
+        // Initialize TextViews
+        TextView tvOriginalTitle = findViewById(R.id.textview_original_title);
+        TextView tvOverView = findViewById(R.id.textview_overview);
+        TextView tvVoteAverage = findViewById(R.id.textview_vote_average);
+        TextView tvReleaseDate = findViewById(R.id.textview_release_date);
 
+        // Initialize ImageView
+        ImageView ivPoster = findViewById(R.id.imageview_poster);
+
+        // Get the Intent and data from MainActivity
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra(getString(R.string.parcel_movie));
 
@@ -41,24 +45,23 @@ public class MovieDetails extends AppCompatActivity {
 
         String overView = movie.getOverview();
         if (overView == null) {
-            tvOverView.setTypeface(null, Typeface.ITALIC);
+            tvOverView.setTypeface(null, Typeface.NORMAL);
             overView = getResources().getString(R.string.no_summary_found);
         }
         tvOverView.setText(overView);
         tvVoteAverage.setText(movie.getDetailedVoteAverage());
 
-        // First get the release date from the object - to be used if something goes wrong with
-        // getting localized release date (catch).
+        // Get the release date from the object - to be used if something goes wrong with getting localized release date.
         String releaseDate = movie.getReleaseDate();
         if(releaseDate != null) {
             try {
                 releaseDate = DateTimeShortForm.getLocalizedDate(this,
                         releaseDate, movie.getDateFormat());
             } catch (ParseException e) {
-                Log.e(LOG_TAG, "Error can't parse the movie release date", e);
+                Log.e(LOG_TAG, getString(R.string.cant_get_release_date), e);
             }
         } else {
-            tvReleaseDate.setTypeface(null, Typeface.ITALIC);
+            tvReleaseDate.setTypeface(null, Typeface.NORMAL);
             releaseDate = getResources().getString(R.string.no_release_date_found);
         }
         tvReleaseDate.setText(releaseDate);
