@@ -21,6 +21,10 @@ public class MovieDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
 
+        setupUI();
+    }
+
+    private void setupUI() {
         // Initialize TextViews
         TextView tvOriginalTitle = findViewById(R.id.textview_original_title);
         TextView tvOverView = findViewById(R.id.textview_overview);
@@ -66,7 +70,6 @@ public class MovieDetails extends AppCompatActivity {
         }
         tvReleaseDate.setText(releaseDate);
     }
-
 
 
 }
